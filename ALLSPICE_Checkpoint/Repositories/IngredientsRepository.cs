@@ -46,7 +46,7 @@ public class IngredientsRepository
         return ingredients;
     }
 
-    internal void DeletedIngredient(int ingredientId)
+    internal void RemoveIngredient(int ingredientId)
     {
         string sql = @"DELETE FROM ingredients WHERE id = @ingredientId LIMIT 1;";
         _db.Execute(sql, new {ingredientId});

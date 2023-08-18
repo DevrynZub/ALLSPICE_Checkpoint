@@ -26,6 +26,8 @@ recipes(
 CREATE TABLE
 ingredients(
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
   name VARCHAR(255) NOT NULL,
   quantity VARCHAR(255) NOT NULL,
   recipeId INT NOT NULL,
@@ -61,7 +63,6 @@ VALUES ('french toast', 'Dip in egg, cin and milk then fry','https://images.unsp
 INSERT INTO ingredients(name, quantity, recipeId, creatorId)
 VALUES('Toast', 'One Toast', 1, '64c49aff4205aa3b679342ad')
 
-SELECT * FROM ingredients WHERE id = 1;
 
 INSERT INTO favorites(recipeId, accountId)
 VALUES('1', '64c49aff4205aa3b679342ad')
