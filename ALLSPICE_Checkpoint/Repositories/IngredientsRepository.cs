@@ -14,7 +14,7 @@ public class IngredientsRepository
         string sql = @"
         INSERT INTO ingredients(name, quantity, recipeId, creatorId)
         VALUES
-        (@name, @quantity, @recipeId, @creatorId);
+        (@name, @Quantity, @RecipeId, @CreatorId);
         SELECT LAST_INSERT_ID()
         ;";
 
@@ -24,7 +24,11 @@ public class IngredientsRepository
 
     internal Ingredient GetIngredientById(int ingredientId)
     {
-        string sql = @"SELECT * FROM ingredients WHERE id = @ingredientId;";
+        string sql = @"
+        SELECT * FROM ingredients 
+        WHERE id = @ingredientId
+        ;";
+        
         Ingredient ingredient = _db.QueryFirstOrDefault<Ingredient>(sql, new {ingredientId});
         return ingredient;
     }
@@ -34,7 +38,8 @@ public class IngredientsRepository
         string sql = @"
         SELECT 
         *
-        FROM ingredients WHERE recipeId = @recipeId;
+        FROM ingredients 
+        WHERE recipeId = @recipeId;
         ;";
 
         List<Ingredient> ingredients = _db.Query<Ingredient>(sql, new {recipeId}).ToList();
