@@ -96,4 +96,18 @@ public async Task<ActionResult<string>> DeleteRecipe(int recipeId)
   }
 }
 
+[HttpGet("{recipeId}/ingredients")]
+public ActionResult<List<Ingredient>> GetIngredientByRecipeId(int recipeId)
+{
+  try
+  {
+    List<Ingredient> ingredients = _ingredientsService.GetIngredientByRecipeId(recipeId);
+  return Ok(ingredients);
+  }
+  catch (Exception e)
+  {
+    return BadRequest(e.Message);
+  }
+}
+
 }

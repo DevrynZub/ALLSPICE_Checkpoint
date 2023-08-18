@@ -25,7 +25,7 @@ Recipe recipe = _recipesRepository.GetRecipeById(recipeId);
 
 if (recipe == null)
 {
-throw new Exception("Your request was <i>exceptional<i>exceptional</i>");
+throw new Exception("Bad Id");
 }
 return recipe;
  }

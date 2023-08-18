@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace allSpice.Repositories;
+namespace ALLSPICE_Checkpoint.Repositories;
 
 public class IngredientsRepository
 {
@@ -46,7 +41,7 @@ public class IngredientsRepository
         return ingredients;
     }
 
-    internal void RemoveIngredient(int ingredientId)
+    internal void DeletedIngredient(int ingredientId)
     {
         string sql = @"DELETE FROM ingredients WHERE id = @ingredientId LIMIT 1;";
         _db.Execute(sql, new {ingredientId});

@@ -30,21 +30,21 @@ public async Task<ActionResult<Ingredient>> CreateIngredient([FromBody] Ingredie
   }
 }
 
-[Authorize]
-[HttpDelete("{ingredientId}")]
-public async Task<ActionResult<string>> DeleteIngredient(int ingredientId)
-{
-  try
-  {
-    Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
-    _ingredientsService.DeleteIngredient(ingredientId, userInfo.Id);
-    return Ok("Ingredient has been Deleted. ");
-  }
-  catch (Exception e)
-  {
-    return BadRequest(e.Message);
-  }
-}
+    [Authorize]
+    [HttpDelete("{ingredientId}")]
+    public async Task<ActionResult<string>> RemoveIngredient(int ingredientId)
+    {
+      try 
+      {
+        Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+        _ingredientsService.RemoveIngredient(ingredientId, userInfo.Id);
+        return Ok("Ingredient has been Deleted");
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
 
 
 

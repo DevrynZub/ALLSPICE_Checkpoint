@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace allSpice.Services;
+namespace ALLSPICE_Checkpoint.Services;
 
 public class IngredientsService
 {
@@ -26,7 +22,7 @@ public class IngredientsService
       Ingredient ingredient = _ingredientsRepository.GetIngredientById(ingredientId);
       if (ingredient == null)
       {
-        throw new Exception($"BAD ID: {ingredientId}");
+        throw new Exception("BAD ID");
       }
       return ingredient;
     }
@@ -42,7 +38,7 @@ public class IngredientsService
       Ingredient ingredient = GetIngredientById(ingredientId);
       if (ingredient.CreatorId != userId)
       {
-                throw new Exception($"YOU DO NOT OWN THIS DATA");
+                throw new Exception("This is not your ingredients");
       }
       _ingredientsRepository.RemoveIngredient(ingredientId);
     }
