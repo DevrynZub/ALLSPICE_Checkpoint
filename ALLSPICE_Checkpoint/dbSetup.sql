@@ -36,20 +36,17 @@ ingredients(
   FOREIGN KEY(creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 )default charset utf8 COMMENT '';
 
-CREATE TABLE
-favorites
-(
+CREATE TABLE favorites(
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update', 
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
   recipeId INT NOT NULL,
-  accountId VARCHAR(255)NOT NULL,
+  accountId VARCHAR(255) NOT Null,
   FOREIGN KEY(recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
   FOREIGN KEY(accountId) REFERENCES accounts(id) ON DELETE CASCADE
-)default charset utf8 COMMENT '';
+) default charset utf8 COMMENT '';
 
-
-
+    
 DROP TABLE recipes;
 
 DROP TABLE ingredients;
@@ -63,6 +60,7 @@ VALUES ('french toast', 'Dip in egg, cin and milk then fry','https://images.unsp
 INSERT INTO ingredients(name, quantity, recipeId, creatorId)
 VALUES('Toast', 'One Toast', 1, '64c49aff4205aa3b679342ad')
 
+  SELECT * FROM favorites WHERE id = 1;
 
 INSERT INTO favorites(recipeId, accountId)
 VALUES('1', '64c49aff4205aa3b679342ad')

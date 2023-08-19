@@ -1,61 +1,73 @@
 namespace ALLSPICE_Checkpoint.Repositories;
 public class FavoritesRepository
 {
-    private readonly IDbConnection _db;
+   private readonly IDbConnection _db;
 
     public FavoritesRepository(IDbConnection db)
     {
         _db = db;
     }
 
-    internal int CreateFavorite(Favorite favoriteData)
+    internal Favorite CreateFavorite(Favorite favoriteData)
     {
       string sql = @"
-      INSERT INTO favorites (accountId, recipeId)
-      VALUES (@AccountId, @RecipeId);
+      INSERT INTO favorites(recipeId, accountId)
+      VALUES
+      (@recipeId, @accountId);
       SELECT LAST_INSERT_ID()
       ;";
       int favoriteId = _db.ExecuteScalar<int>(sql, favoriteData);
-      return favoriteId;
+      favoriteData.Id = favoriteId;
+      return favoriteData;
     }
 
     internal Favorite GetFavoriteById(int favoriteId)
     {
-      string sql = "SELECT * FROM favorites WHERE id = @favoriteId;";
-
-      Favorite favorite = _db.QueryFirstOrDefault<Favorite>(sql,new {favoriteId});
+      string sql = @"
+      SELECT
+      *
+      FROM favorites
+      WHERE id = @favoriteId
+      ;";
+      Favorite favorite = _db.QueryFirstOrDefault<Favorite>(sql,new{favoriteId});
       return favorite;
     }
 
-    internal List<RecipeFavorite> GetMyRecipeFavorites(string userId)
+    internal List<RecipeFavorite> GetProfileFavorites(string userId)
     {
-        string sql = @"
-        SELECT
-        fav.*,
-        r.*,
-        acc.*
-        FROM favorites fav
-        JOIN recipes r ON r.id = fav.recipeId
-        JOIN accounts acc ON acc.id = fav.accountId
-        WHERE fav.accountId = @userId
-        ;";
+      string sql = @"
+      SELECT
+      fav.*,
+      rec.*,
+      acc.*
+      FROM favorites fav
+      JOIN recipes rec ON rec.id = fav.RecipeId
+      JOIN accounts acc ON acc.id = fav.AccountId
+      Where fav.AccountId = @userId
+      ;";
 
-        List<RecipeFavorite> recipes = _db.Query<Favorite, RecipeFavorite, Profile,RecipeFavorite>(
-          sql,
-          (favorite, recipe, profile)=>
-          {
-            recipe.FavoriteId = favorite.Id;
-            recipe.Creator = profile;
-            return recipe;
-          },
-        new {userId}).ToList();
-        return recipes;
+      List<RecipeFavorite> recipeFavorites = _db.Query<Favorite, RecipeFavorite, Profile, RecipeFavorite>(
+        sql,
+        (favorite, recipe, profile)=>
+        {
+          recipe.FavoriteId = favorite.Id;
+          recipe.Creator = profile;
+          return recipe;
+        },
+      new {userId}
+      ).ToList();
+
+      return recipeFavorites;
     }
 
     internal void RemoveFavorite(int favoriteId)
     {
-      string sql = "DELETE FROM favorites WHERE id = @favoriteId LIMIT 1;";
+      string sql = @"
+      DELETE
+      FROM favorites 
+      WHERE id = @favoriteId LIMIT 1
+      ;";
 
-      _db.Execute(sql, new {favoriteId});
+      _db.Execute(sql, new{favoriteId});
     }
 }

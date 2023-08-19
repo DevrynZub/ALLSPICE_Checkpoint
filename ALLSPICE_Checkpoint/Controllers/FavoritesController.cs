@@ -1,7 +1,10 @@
 namespace ALLSPICE_Checkpoint.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
 public class FavoritesController : ControllerBase
 {
-      private readonly FavoritesService _favoritesService;
+    private readonly FavoritesService _favoritesService;
     private readonly Auth0Provider _auth0Provider;
 
     public FavoritesController(FavoritesService favoritesService, Auth0Provider auth0Provider)
@@ -26,15 +29,16 @@ public class FavoritesController : ControllerBase
         return BadRequest(e.Message);
       }
     }
+
     [Authorize]
     [HttpDelete("{favoriteId}")]
-    public async Task<ActionResult<string>> RemoveFavorite(int favoriteId)
+    public async Task<ActionResult<Favorite>> RemoveFavorite(int favoriteId)
     {
       try 
       {
-      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
-      _favoritesService.RemoveFavorite(favoriteId,userInfo.Id);
-      return Ok("Favorite was deleted.");
+        Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+        _favoritesService.RemoveFavorite(favoriteId, userInfo.Id);
+        return Ok("Favorite Removed");
       }
       catch (Exception e)
       {

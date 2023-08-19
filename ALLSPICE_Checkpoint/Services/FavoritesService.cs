@@ -10,33 +10,33 @@ public class FavoritesService
 
     internal Favorite CreateFavorite(Favorite favoriteData)
     {
-        int favoriteId = _favoritesRepository.CreateFavorite(favoriteData);
-        Favorite favorite = GetFavoriteById(favoriteId);
-        return favorite;
+      Favorite favorite = _favoritesRepository.CreateFavorite(favoriteData);
+      return favorite;
     }
+
+    internal List<RecipeFavorite> GetProfileFavorites(string userId)
+    {
+      List<RecipeFavorite> recipeFavorites = _favoritesRepository.GetProfileFavorites(userId);
+      return recipeFavorites;
+    }
+
     internal Favorite GetFavoriteById(int favoriteId)
     {
       Favorite favorite = _favoritesRepository.GetFavoriteById(favoriteId);
-      if(favorite == null)
+      if (favorite == null)
       {
-        throw new Exception("BAD ID");
+        throw new Exception($"BAD ID: {favoriteId}");
       }
       return favorite;
     }
 
-    internal List<RecipeFavorite> GetMyRecipeFavorites(string userId)
-    {
-        List<RecipeFavorite> recipes = _favoritesRepository.GetMyRecipeFavorites(userId);
-        return recipes;
-    }
-
     internal void RemoveFavorite(int favoriteId, string userId)
     {
-        Favorite foundFavorite = GetFavoriteById(favoriteId);
-        if(foundFavorite.AccountId != userId)
-        {
-          throw new Exception("Cannot delete a favorite that isn't yours.");
-        }
-        _favoritesRepository.RemoveFavorite(favoriteId);
+      Favorite favorite = GetFavoriteById(favoriteId);
+      if (favorite.AccountId != userId)
+      {
+          throw new Exception($"YOU DO NOT OWN THIS DATA");
+      }
+      _favoritesRepository.RemoveFavorite(favoriteId);
     }
 }
