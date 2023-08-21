@@ -1,41 +1,91 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 bg-white rounded elevation-3">
-      <img src="https://bcw.blob.core.windows.net/public/img/8600856373152463" alt="CodeWorks Logo"
-        class="rounded-circle">
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card col-12 text-dark text-center spice-img d-flex justify-content-center align-items-center">
+        <h1>AllSpice</h1>
+        <p>Because who doesnt love food</p>
+      </div>
+    </div>
+  </div>
+  <div class="filtered-content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+          <div class="bg-white d-flex flex-wrap justify-content-around p-3 rounded filter-buttons">
+            <button class="btn btn-success" @click="filterBy = ''">Home</button>
+            <button class="btn btn-success" @click="filterBy = 'creator'">My Recipes</button>
+            <button class="btn btn-success" @click="filterBy = ''">Favorites</button>
+          </div>
+          <div class="col-12 text-center mt-2">
+            <form @submit.prevent="filterRecipes()">
+              <label for="Recipes">Find:</label>
+              <input v-model="filterBy" type="search" id="Recipes">
+              <button type="submit" class="btn btn-success mdi mdi-binoculars"></button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-12 p-3" v-for="recipe in recipes" :key="recipe.id">
+          <RecipeCard :recipeProp="recipe" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { computed, onMounted, ref } from 'vue';
+import Pop from '../utils/Pop.js';
+import { recipeService } from '../services/RecipeService.js'
+import { AppState } from '../AppState.js';
+import RecipeCard from '../components/RecipeCard.vue';
+
 export default {
   setup() {
-    return {}
-  }
+    const filterBy = ref("");
+    async function getRecipes() {
+      try {
+        await recipeService.getRecipes();
+      }
+      catch (error) {
+        Pop.error(error.message);
+      }
+    }
+    onMounted(() => {
+      getRecipes();
+    });
+    return {
+      filterBy,
+      recipes: computed(() => {
+        if (filterBy.value == "") {
+          return AppState.recipes;
+        }
+        else {
+          return AppState.recipes.filter(recipe => recipe.creator == filterBy.value);
+        }
+      })
+    };
+  },
+  components: { RecipeCard }
 }
 </script>
 
 <style scoped lang="scss">
-.home {
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
+.container-fluid {
+  position: relative;
+}
 
-  .home-card {
-    width: 50vw;
+.spice-img {
+  background-image: url(https://images.unsplash.com/photo-1596040033229-a9821ebd058d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80);
+  height: 50vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
 
-    >img {
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
+.filtered-content {
+  position: relative;
+  margin-top: -20px;
 }
 </style>
