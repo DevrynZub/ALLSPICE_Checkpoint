@@ -6,6 +6,8 @@
         <p>Because who doesnt love food</p>
       </div>
     </div>
+    <button data-bs-toggle="modal" data-bs-target="#createRecipe" class="btn btn-success megrim fs-2">Create
+      Recipe</button>
   </div>
   <div class="filtered-content">
     <div class="container">
@@ -14,7 +16,7 @@
           <div class="bg-white d-flex flex-wrap justify-content-around p-3 rounded filter-buttons">
             <button class="btn btn-success" @click="filterBy = ''">Home</button>
             <button class="btn btn-success" @click="filterBy = 'creator'">My Recipes</button>
-            <button class="btn btn-success" @click="filterBy = ''">Favorites</button>
+            <button class="btn btn-success" @click="filterBy = 'favorite'">Favorites</button>
           </div>
           <div class="col-12 text-center mt-2">
             <form @submit.prevent="filterRecipes()">
@@ -32,6 +34,16 @@
       </div>
     </div>
   </div>
+
+
+  <ModalComponent id="createRecipe">
+    <template #modalHeader>
+      Create Recipe
+    </template>
+    <template #modalBody>
+      <CreateRecipe />
+    </template>
+  </ModalComponent>
 </template>
 
 <script>
@@ -40,34 +52,45 @@ import Pop from '../utils/Pop.js';
 import { recipeService } from '../services/RecipeService.js'
 import { AppState } from '../AppState.js';
 import RecipeCard from '../components/RecipeCard.vue';
+import { logger } from '../utils/Logger.js';
+import CreateRecipe from '../components/CreateRecipe.vue';
 
 export default {
   setup() {
-    const filterBy = ref("");
+    const filterBy = ref('');
+    const category = ref('')
     async function getRecipes() {
       try {
         await recipeService.getRecipes();
       }
       catch (error) {
         Pop.error(error.message);
+        logger.log(error);
       }
     }
     onMounted(() => {
       getRecipes();
     });
+
     return {
       filterBy,
+      category,
       recipes: computed(() => {
-        if (filterBy.value == "") {
-          return AppState.recipes;
+
+        let filtered = AppState.recipes.filter(r => (filterBy.value ? r.title.toLowerCase().includes(filterBy.value.toLowerCase()) : true))
+        if (category.value != '') {
+          filtered = filtered.filter(r => (category.value ? r.category.toLowerCase().includes(category.value.toLowerCase()) : true))
         }
-        else {
-          return AppState.recipes.filter(recipe => recipe.creator == filterBy.value);
-        }
-      })
+        return filtered
+
+      }),
+      setCategory(selectedcategory) {
+        category.value = selectedcategory;
+      }
+
     };
   },
-  components: { RecipeCard }
+  components: { RecipeCard, CreateRecipe }
 }
 </script>
 

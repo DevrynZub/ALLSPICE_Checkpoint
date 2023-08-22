@@ -9,7 +9,6 @@
     <template #body>
       <ActiveRecipe />
     </template>
-
   </BigModal>
 </template>
 
