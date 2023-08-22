@@ -3,13 +3,15 @@
     <div class="row">
       <div class="col-md-6 col-12 d-flex ps-0">
         <img class="img-fluid rounded-start" :src="recipe.img" alt="uh oh">
-        <div>
-          <i class="fs-2 mdi mdi-heart-outline like selectable text-danger rounded-bottom"></i>
-        </div>
       </div>
       <div class="col-md-6 col-12">
         <div class="row">
-          <div class="col-12 fs-3">{{ recipe.title }} <span class="category rounded px-1">{{ recipe.category }}</span>
+          <div class="col-12 fs-3">
+            <p>Recipe Name: {{ recipe.title }}</p>
+            <p class="category rounded px-1">{{ recipe.category }}</p>
+            <p>{{ recipe.ingredients }}</p>
+            <h2>Instructions:</h2>
+            <h4>{{ recipe.instructions }}</h4>
           </div>
         </div>
       </div>

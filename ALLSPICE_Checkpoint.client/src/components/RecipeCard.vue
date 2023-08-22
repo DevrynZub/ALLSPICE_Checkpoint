@@ -1,6 +1,6 @@
 <template>
   <div @click="setActiveRecipe(recipeProp), getIngredientsByRecipe(recipeProp.id)" data-bs-toggle="modal"
-    class="recipe-card">
+    data-bs-target="#recipeDetails" class="recipe-card">
     <div class="recipe-image" :style="{ backgroundImage: 'url(' + recipeProp.img + ')' }">
       <div class="like-icon" :class="{ 'liked': recipeProp.isFavorite }">
         <i class="mdi mdi-thumb-up"
