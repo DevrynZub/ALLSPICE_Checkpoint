@@ -12,6 +12,14 @@
             <p>{{ recipe.ingredients }}</p>
             <h2>Instructions:</h2>
             <h4>{{ recipe.instructions }}</h4>
+            <div v-if="favorite == null">
+              <i @click="createFavorite(recipe.id)"
+                class="fs-2 mdi mdi-thumb-up like selectable text-success rounded-bottom"></i>
+            </div>
+            <div v-else>
+              <i @click="removeFavorite(favorite?.id)"
+                class="fs-2 mdi mdi-thumb-up like selectable text-danger rounded-bottom"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -23,6 +31,10 @@
 <script>
 import { computed } from "vue";
 import { AppState } from "../AppState.js";
+import Pop from "../utils/Pop.js";
+import { logger } from "../utils/Logger.js";
+import { favoriteService } from "../services/FavoriteService.js";
+import { recipeService } from "../services/RecipeService.js"
 
 export default {
   setup() {
@@ -32,7 +44,40 @@ export default {
     return {
 
       recipe: computed(() => AppState.activeRecipe),
-      ingredients: computed(() => AppState.ingredients)
+      ingredients: computed(() => AppState.ingredients),
+      favorite: computed(() => {
+        const result = AppState.favorites.find(f => f.recipeId == AppState.activeRecipe.id)
+        let int = 2 + 2
+        return result
+      }),
+
+
+      async createFavorite(recipeId) {
+        try {
+          const favoriteData = { recipeId }
+          await favoriteService.createFavorite(favoriteData)
+        } catch (error) {
+          Pop.error(error.message)
+          logger.log(error)
+        }
+      },
+      async removeFavorite(favoriteId) {
+        try {
+          await favoriteService.removeFavorite(favoriteId)
+        } catch (error) {
+          Pop.error(error.message)
+          logger.log(error)
+        }
+      },
+      async removeRecipe() {
+        try {
+          const recipeId = AppState.activeRecipe
+          await recipeService.removeRecipe(recipeId)
+        } catch (error) {
+          Pop.error(error.message)
+          logger.log(error)
+        }
+      }
     }
   }
 }

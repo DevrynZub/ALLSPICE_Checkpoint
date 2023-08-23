@@ -29,7 +29,7 @@ class RecipeService {
 
   async getIngredientsByRecipeId(recipeId) {
     const res = await api.get(`api/recipes/${recipeId}/ingredients`)
-    const ingredients = res.data.map(i => new Ingredient(i))
+    const ingredients = res.data.map(ingredients => new Ingredient(ingredients))
     AppState.ingredients = ingredients
   }
 
@@ -39,6 +39,19 @@ class RecipeService {
     const recipe = new Recipe(res.data)
     AppState.activeRecipe = recipe
     AppState.recipes.splice(foundRecipe, 1, recipe)
+  }
+
+  async getRecipesByQuery(queryObject) {
+    const res = await api.get(`api/recipes?title=${queryObject.query}`)
+    const recipes = res.data.map(recipe => new Recipe(recipe));
+    AppState.recipes = recipes;
+  }
+  async removeRecipe(recipeId) {
+    const res = await api.delete(`api/recipes/${recipeId}`)
+    logger.log('You deleted a recipe', res.data)
+    const recipeIndex = AppState.recipes.findIndex(recipe => recipe.id == recipeId)
+    AppState.recipes.splice(recipeIndex, 1)
+    AppState.activeRecipe = ''
   }
 
 
