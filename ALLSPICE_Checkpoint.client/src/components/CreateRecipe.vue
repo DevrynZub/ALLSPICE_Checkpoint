@@ -10,15 +10,15 @@
       <input v-model="editable.img" class="form-control" type="text" id="img" minlength="5" maxlength="1000" required>
     </div>
     <div class="form-floating mb-3">
-      <textarea v-model="editable.instructions" class="form-control" placeholder="Instructions for your Recipe"
-        id="recipeInstruction" maxlength="70000" minlength="5" required></textarea>
-      <label for="recipeInstruction">Recipe Instructions</label>
-    </div>
-    <div class="form-floating mb-3">
       <label for="category">Recipe Category</label>
       <select v-model="editable.category" class="form-select" name="category" id="category" required>
         <option v-for="option in optionArr" :key="option" :value="option">{{ option }}</option>
       </select>
+    </div>
+    <div class="form-floating mb-3">
+      <textarea v-model="editable.instructions" required class="form-control" name="instructions" id="instructions"
+        style="height:200px"></textarea>
+      <label for="instructions">Instructions</label>
     </div>
     <div class="text-end">
       <button class="btn btn-danger" type="submit">Submit</button>

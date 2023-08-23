@@ -16,10 +16,6 @@
               <i @click="createFavorite(recipe.id)"
                 class="fs-2 mdi mdi-thumb-up like selectable text-success rounded-bottom"></i>
             </div>
-            <div v-else>
-              <i @click="removeFavorite(favorite?.id)"
-                class="fs-2 mdi mdi-thumb-up like selectable text-danger rounded-bottom"></i>
-            </div>
           </div>
         </div>
       </div>
