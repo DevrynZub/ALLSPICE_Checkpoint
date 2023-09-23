@@ -27,7 +27,7 @@
     </form>
   </div>
   <div class="row">
-    <div class="col-md-4 col-12 p-3" v-for="recipe in recipes" :key="recipe.id">
+    <div class="col-md-3 col-12 p-3" v-for="recipe in recipes" :key="recipe.id">
       <RecipeCard :recipeProp="recipe" />
     </div>
   </div>

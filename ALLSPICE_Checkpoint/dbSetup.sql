@@ -1,4 +1,4 @@
--- Active: 1692119137939@@SG-LilDew-MySQL-7784-mysql-master.servers.mongodirector.com@3306@student
+-- Active: 1695249200957@@34.220.170.12@3306@AllSpice
 
 CREATE TABLE IF NOT EXISTS accounts(
   id VARCHAR(255) NOT NULL primary key COMMENT 'primary key',
