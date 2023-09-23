@@ -32,7 +32,6 @@
     </div>
   </div>
 
-
   <ModalComponent id="createRecipe">
     <template #modalHeader>
       Create Recipe
