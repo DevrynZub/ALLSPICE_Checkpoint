@@ -11,6 +11,8 @@
       aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <button data-bs-toggle="modal" data-bs-target="#createRecipe" class="btn btn-success megrim fs-4">Create
+      Recipe</button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
         <!-- <li>
@@ -22,6 +24,14 @@
       <!-- LOGIN COMPONENT HERE -->
       <Login />
     </div>
+    <ModalComponent id="createRecipe">
+      <template #modalHeader>
+        Create Recipe
+      </template>
+      <template #modalBody>
+        <CreateRecipe />
+      </template>
+    </ModalComponent>
   </nav>
 </template>
 
