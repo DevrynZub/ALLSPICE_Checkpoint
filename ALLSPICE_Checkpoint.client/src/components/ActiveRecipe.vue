@@ -2,26 +2,29 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-6 col-12 d-flex ps-0">
-        <img class="img-fluid rounded-start" :src="recipe.img" alt="uh oh">
+        <img class="img-fluid rounded-start active-card" :src="recipe.img" alt="uh oh">
       </div>
       <div class="col-md-6 col-12">
         <div class="row">
           <div class="col-12 fs-3">
-            <p>Recipe Name: {{ recipe.title }}</p>
+            <p class="recipe-name">Recipe Name: {{ recipe.title }}</p>
             <p class="category rounded px-1">{{ recipe.category }}</p>
             <p>{{ recipe.ingredients }}</p>
             <h2>Instructions:</h2>
-            <h4>{{ recipe.instructions }}</h4>
-            <div v-if="favorite == null">
-              <i @click="createFavorite(recipe.id)"
-                class="fs-2 mdi mdi-thumb-up like selectable text-success rounded-bottom"></i>
-            </div>
+            <h4 class="instructions">{{ recipe.instructions }}</h4>
           </div>
+        </div>
+        <div v-if="isFavorite" class="favorite-elem text-center text-danger">
+          <i class="mdi mdi-heart fs-4"></i>
+        </div>
+        <div v-else class="favorite-elem text-center text-danger">
+          <i class="mdi mdi-heart-outline fs-4"></i>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 
 <script>
@@ -41,20 +44,25 @@ export default {
 
       recipe: computed(() => AppState.activeRecipe),
       ingredients: computed(() => AppState.ingredients),
-      favorite: computed(() => {
-        const result = AppState.favorites.find(f => f.recipeId == AppState.activeRecipe.id)
-        let int = 2 + 2
-        return result
+      isFavorite: computed(() => {
+        let fav = AppState.favorites?.find(f => f?.recipeId == AppState.recipes?.id)
+        if (fav?.accountId == AppState.account?.id) {
+          return fav
+        } return null
       }),
 
 
-      async createFavorite(recipeId) {
+      async createFavorite() {
         try {
-          const favoriteData = { recipeId }
-          await favoriteService.createFavorite(favoriteData)
-        } catch (error) {
-          Pop.error(error.message)
-          logger.log(error)
+          const activeRecipe = AppState.activeRecipe
+          const recipeId = AppState.activeRecipe.id
+          const formData = { recipeId: recipeId }
+          // const accountId = AppState.account.id
+          await favoriteService.createFavorite(formData)
+          Pop.toast(`${activeRecipe.title} has been added to your favorites!`)
+        }
+        catch (error) {
+          return Pop.error(error.message)
         }
       },
       async removeFavorite(favoriteId) {
@@ -85,20 +93,35 @@ export default {
   max-height: 60vh;
 }
 
+.active-card-img {
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  margin: 10px;
+  max-height: 60vh;
+  width: 100%;
+}
+
+.recipe-name {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
 .like {
   position: relative;
-  top: 0em;
-  left: -2em;
-  background-color: gray;
+  top: -7.1em;
+  left: 16em;
   opacity: 80%;
-
 }
 
 .category {
-  background-color: gray;
   color: white;
+  background-color: #007bff;
+  /* Change the background color for category */
+  padding: 3px 8px;
+  /* Add padding to the category label */
+  border-radius: 5px;
+  /* Rounded corners for category label */
 }
-
 
 .instructions {
   max-width: 40vh;

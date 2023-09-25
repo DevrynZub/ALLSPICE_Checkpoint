@@ -7,6 +7,7 @@
       <h4 class="recipe-category">{{ recipeProp.category }}</h4>
       <h3 class="recipe-title">{{ recipeProp.title }}</h3>
     </div>
+
   </div>
 </template>
 
@@ -16,6 +17,8 @@ import { recipeService } from "../services/RecipeService.js";
 import { ingredientService } from "../services/IngredientService.js";
 import { logger } from "../utils/Logger.js";
 import Pop from "../utils/Pop.js";
+import { computed } from "vue";
+import { AppState } from "../AppState.js";
 
 export default {
   props: {
@@ -24,6 +27,8 @@ export default {
   setup() {
 
     return {
+
+      recipes: computed(() => AppState.recipes),
 
       setActiveRecipe(recipe) {
         try {

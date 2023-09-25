@@ -18,11 +18,11 @@ class FavoriteService {
 
   async createFavorite(favoriteData) {
     const res = await api.post('api/favorites', favoriteData)
-    logger.log('favorites res data', res.data)
+    // logger.log('favorites res data', res.data)
     const favorite = new Favorite(res.data)
-    logger.log('new favorite', favorite)
+    // logger.log('new favorite', favorite)
     AppState.favorites.push(favorite)
-    logger.log('Appstate new favorite', AppState.favorites)
+    logger.log('New favorite', AppState.favorites)
   }
 
   async removeFavorite(favoriteId) {

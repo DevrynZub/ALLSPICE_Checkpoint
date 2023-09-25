@@ -6,11 +6,14 @@
         <p>Because who doesn't love food</p>
       </div>
       <div class="row justify-content-center">
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-6">
           <div class="filtered-content bg-white d-flex flex-wrap justify-content-around p-3 rounded filter-buttons">
-            <button class="btn btn-success" @click="filterBy = ''">Home</button>
-            <button class="btn btn-success" @click="filterBy = 'creator'">My Recipes</button>
-            <button class="btn btn-success" @click="filterBy = 'favorite'">Favorites</button>
+            <button class="btn btn-success rounded p-2" @click="filterBy = ''">All</button>
+            <button class="btn btn-success rounded p-2" @click="filterBy = 'Cheese'">Cheese</button>
+            <button class="btn btn-success rounded p-2" @click="filterBy = 'Italian'">Italian</button>
+            <button class="btn btn-success rounded p-2" @click="filterBy = 'Mexican'">Mexican</button>
+            <button class="btn btn-success rounded p-2" @click="filterBy = 'Specialty Coffee'">Specialty Coffee</button>
+            <button class="btn btn-success rounded p-2" @click="filterBy = 'Soup'">Soup</button>
           </div>
         </div>
       </div>
