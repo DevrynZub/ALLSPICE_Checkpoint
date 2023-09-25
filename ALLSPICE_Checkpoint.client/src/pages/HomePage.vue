@@ -13,17 +13,10 @@
             <button class="btn btn-success rounded p-2" @click="filterBy = 'Italian'">Italian</button>
             <button class="btn btn-success rounded p-2" @click="filterBy = 'Mexican'">Mexican</button>
             <button class="btn btn-success rounded p-2" @click="filterBy = 'Specialty Coffee'">Specialty Coffee</button>
-            <button class="btn btn-success rounded p-2" @click="filterBy = 'Soup'">Soup</button>
+            <button class="btn btn-success rounded p-2" @click="filterBy = 'Halloween'">Holiday</button>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-12 text-center mt-2">
-      <form @submit.prevent="filterRecipes()">
-        <label for="Recipes">Find:</label>
-        <input v-model="filterBy" type="search" id="Recipes">
-        <button type="submit" class="btn btn-success mdi mdi-binoculars"></button>
-      </form>
     </div>
     <div class="row">
       <div class="col-md-4 col-12 p-3" v-for="recipe in recipes" :key="recipe.id">
@@ -41,11 +34,11 @@ import { favoriteService } from '../services/FavoriteService.js'
 import { AppState } from '../AppState.js';
 import RecipeCard from '../components/RecipeCard.vue';
 import { logger } from '../utils/Logger.js';
+import { accountService } from '../services/AccountService.js';
 
 export default {
   setup() {
     const filterBy = ref("");
-
 
     async function getRecipes() {
       try {
@@ -57,33 +50,26 @@ export default {
       }
     }
 
-    async function getFavorites() {
-      try {
-        await favoriteService.getFavorites()
-      } catch (error) {
-        Pop.error(error.message)
-        logger.log(error)
-      }
-    }
     onMounted(() => {
       getRecipes();
     });
 
     watchEffect(() => {
-      if (AppState.account.id) {
-        getFavorites();
+      if (AppState.account?.id) {
+        accountService.getFavorites()
       }
     })
 
     return {
       filterBy,
+      account: computed(() => AppState.account),
       recipes: computed(() => {
-        if (filterBy.value == "") {
+        if (filterBy.value == '') {
           return AppState.recipes
         } else {
-          return AppState.recipes.filter(recipe => recipe.category == filterBy.value)
+          return AppState.recipes.filter(a => a.category == filterBy.value)
         }
-      })
+      }),
     };
   },
 

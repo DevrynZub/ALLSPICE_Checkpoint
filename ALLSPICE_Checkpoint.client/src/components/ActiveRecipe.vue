@@ -14,12 +14,6 @@
             <h4 class="instructions">{{ recipe.instructions }}</h4>
           </div>
         </div>
-        <div v-if="isFavorite" class="favorite-elem text-center text-danger">
-          <i class="mdi mdi-heart fs-4"></i>
-        </div>
-        <div v-else class="favorite-elem text-center text-danger">
-          <i class="mdi mdi-heart-outline fs-4"></i>
-        </div>
       </div>
     </div>
   </div>
