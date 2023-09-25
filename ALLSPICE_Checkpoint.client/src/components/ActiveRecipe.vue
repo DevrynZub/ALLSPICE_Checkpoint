@@ -8,13 +8,16 @@
         <div class="row">
           <div class="col-12 fs-3">
             <p class="recipe-name">Recipe Name: {{ recipe.title }}</p>
-            <p class="category rounded px-1">{{ recipe.category }}</p>
+            <p class="category rounded p-2">{{ recipe.category }}</p>
             <p>{{ recipe.ingredients }}</p>
             <h2>Instructions:</h2>
             <h4 class="instructions">{{ recipe.instructions }}</h4>
           </div>
         </div>
       </div>
+      <i v-if="activeRecipe?.creatorId == account.id" class="mdi mdi-delete fs-4 selectable" title="Delete Recipe"
+        selectable @click="removeRecipe()"></i>
+      <button type="button" class="btn-close ms-2" title="Close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
   </div>
 </template>
@@ -22,7 +25,7 @@
 
 
 <script>
-import { computed } from "vue";
+import { computed, watchEffect } from "vue";
 import { AppState } from "../AppState.js";
 import Pop from "../utils/Pop.js";
 import { logger } from "../utils/Logger.js";
@@ -33,13 +36,28 @@ export default {
   setup() {
 
 
+    function _computeFavorite() {
+      const foundFav = AppState.myFavorites?.find(f => f?.recipeId == AppState.activeRecipe?.id)
+      if (foundFav?.accountId == AppState.account?.id) {
+        return foundFav
+      } return null
+    }
+
+    watchEffect(() => {
+      _computeFavorite()
+    })
+
+
+
 
     return {
-
       recipe: computed(() => AppState.activeRecipe),
       ingredients: computed(() => AppState.ingredients),
+      activeIngredient: computed(() => AppState.activeIngredient),
+      favorites: computed(() => AppState.favorites),
+      account: computed(() => AppState.account),
       isFavorite: computed(() => {
-        let fav = AppState.favorites?.find(f => f?.recipeId == AppState.recipes?.id)
+        let fav = AppState.favorites.find(f => f?.recipeId == AppState.activeRecipe?.id)
         if (fav?.accountId == AppState.account?.id) {
           return fav
         } return null
@@ -88,7 +106,6 @@ export default {
 }
 
 .active-card-img {
-  border: 2px solid #007bff;
   border-radius: 10px;
   margin: 10px;
   max-height: 60vh;
@@ -109,12 +126,9 @@ export default {
 
 .category {
   color: white;
-  background-color: #007bff;
-  /* Change the background color for category */
-  padding: 3px 8px;
-  /* Add padding to the category label */
-  border-radius: 5px;
-  /* Rounded corners for category label */
+  background-color: #7fdca2;
+  padding: 2px;
+  max-width: fit-content;
 }
 
 .instructions {

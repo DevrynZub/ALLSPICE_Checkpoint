@@ -51,7 +51,6 @@ class RecipeService {
     logger.log('You deleted a recipe', res.data)
     const recipeIndex = AppState.recipes.findIndex(recipe => recipe.id == recipeId)
     AppState.recipes.splice(recipeIndex, 1)
-    AppState.activeRecipe = ''
   }
 
 
